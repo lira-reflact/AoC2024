@@ -52,7 +52,7 @@ const part2 = (input: string) => {
     return total;
 }
 
-const filePath = 'input/aoc-03.txt';
+const filePath = 'input/Day03.txt';
 const fileContent = readInputFile(filePath);
 
 const results = calculateMulSum(fileContent);

@@ -34,7 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
-console.log("Advent of Code Day Two | 2");
+console.log("Advent of Code Day One | 2");
 const readInputFile = (filePath) => {
     try {
         return fs.readFileSync(filePath, 'utf-8');
@@ -44,46 +44,46 @@ const readInputFile = (filePath) => {
         return '';
     }
 };
-const filePath = 'input/aoc-02.txt';
+const filePath = 'input/Day01.txt';
 const fileContent = readInputFile(filePath);
 let fileContentSplit = fileContent.split("\n");
-const isSafeSequence = (numbers) => {
-    let direction = null;
-    for (let i = 1; i < numbers.length; i++) {
-        const diff = numbers[i] - numbers[i - 1];
-        if (diff < -3 || diff > 3 || diff === 0)
-            return false;
-        if (direction === null) {
-            direction = diff > 0 ? "increasing" : "decreasing";
-        }
-        else if ((direction === "increasing" && diff < 0) ||
-            (direction === "decreasing" && diff > 0)) {
-            return false;
-        }
-    }
-    return true;
-};
-const isSafeWithDampener = (numbers) => {
-    for (let i = 0; i < numbers.length; i++) {
-        const modifiedSequence = [...numbers.slice(0, i), ...numbers.slice(i + 1)];
-        if (isSafeSequence(modifiedSequence)) {
-            return true;
-        }
-    }
-    return false;
-};
-const countSafeReports = (reports) => {
-    let safeReports = 0;
-    for (const report of reports) {
-        const numbers = report.split(" ").map(num => parseInt(num, 10));
-        if (numbers.some(isNaN)) {
-            console.error("The number sequence has invalid entries:", report);
+const processColumns = (lines) => {
+    const left = [];
+    const right = [];
+    let isLeftColumn = true;
+    for (const line of lines) {
+        const trimmedLine = line.trim();
+        if (trimmedLine === "") {
             continue;
         }
-        if (isSafeSequence(numbers) || isSafeWithDampener(numbers)) {
-            safeReports++;
+        const parts = trimmedLine.split(/\s+/);
+        if (parts.length !== 2) {
+            console.error(`Invalid line, 3 Values Expected: "${trimmedLine}"`);
+            continue;
         }
+        const leftValue = parseFloat(parts[0]);
+        const rightValue = parseFloat(parts[1]);
+        if (isNaN(leftValue) || isNaN(rightValue)) {
+            console.error(`Invalid number in line: "${trimmedLine}"`);
+            continue;
+        }
+        left.push(leftValue);
+        right.push(rightValue);
     }
-    return safeReports;
+    right.sort((a, b) => a - b);
+    return { left, right };
 };
-console.log("Safe reports with Dampener:", countSafeReports(fileContentSplit));
+function calculateSimilarityScore(left, right) {
+    const rightCount = new Map();
+    for (const num of right) {
+        rightCount.set(num, (rightCount.get(num) || 0) + 1);
+    }
+    let similarityScore = 0;
+    for (const num of left) {
+        const count = rightCount.get(num) || 0;
+        similarityScore += num * count;
+    }
+    return similarityScore;
+}
+const sortedColumns = processColumns(fileContentSplit);
+console.log("Similarity score:", calculateSimilarityScore(sortedColumns.left, sortedColumns.right));

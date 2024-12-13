@@ -44,7 +44,7 @@ const readInputFile = (filePath) => {
         return '';
     }
 };
-const filePath = 'input/aoc-02.txt';
+const filePath = 'input/Day02.txt';
 const fileContent = readInputFile(filePath);
 let fileContentSplit = fileContent.split("\n");
 const testIfSafe = (reports) => {

@@ -34,7 +34,6 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
-console.log("Advent of Code Day One | 2");
 const readInputFile = (filePath) => {
     try {
         return fs.readFileSync(filePath, 'utf-8');
@@ -44,7 +43,7 @@ const readInputFile = (filePath) => {
         return '';
     }
 };
-const filePath = 'input/aoc-01-1.txt';
+const filePath = 'input/Day01.txt';
 const fileContent = readInputFile(filePath);
 let fileContentSplit = fileContent.split("\n");
 const processColumns = (lines) => {
@@ -61,6 +60,7 @@ const processColumns = (lines) => {
             console.error(`Invalid line, 3 Values Expected: "${trimmedLine}"`);
             continue;
         }
+        console.log();
         const leftValue = parseFloat(parts[0]);
         const rightValue = parseFloat(parts[1]);
         if (isNaN(leftValue) || isNaN(rightValue)) {
@@ -70,20 +70,20 @@ const processColumns = (lines) => {
         left.push(leftValue);
         right.push(rightValue);
     }
+    left.sort((a, b) => a - b);
     right.sort((a, b) => a - b);
     return { left, right };
 };
-function calculateSimilarityScore(left, right) {
-    const rightCount = new Map();
-    for (const num of right) {
-        rightCount.set(num, (rightCount.get(num) || 0) + 1);
+const calculateSumOfDifferences = (left, right) => {
+    const minLength = Math.min(left.length, right.length);
+    let sumOfDifferences = 0;
+    for (let i = 0; i < minLength; i++) {
+        const difference = Math.abs(left[i] - right[i]);
+        console.log(`Rang ${i + 1}: | ${left[i]} - ${right[i]} | = ${difference}`);
+        sumOfDifferences += difference;
     }
-    let similarityScore = 0;
-    for (const num of left) {
-        const count = rightCount.get(num) || 0;
-        similarityScore += num * count;
-    }
-    return similarityScore;
-}
+    return sumOfDifferences;
+};
 const sortedColumns = processColumns(fileContentSplit);
-console.log("Similarity score:", calculateSimilarityScore(sortedColumns.left, sortedColumns.right));
+const result = calculateSumOfDifferences(sortedColumns.left, sortedColumns.right);
+console.log("Sum of differences:", result);

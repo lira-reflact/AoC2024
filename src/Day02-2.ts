@@ -11,7 +11,7 @@ const readInputFile = (filePath: string): string => {
     }
 };
 
-const filePath = 'input/aoc-02.txt';
+const filePath = 'input/Day02.txt';
 const fileContent = readInputFile(filePath);
 let fileContentSplit = fileContent.split("\n");
 const isSafeSequence = (numbers: number[]): boolean => {

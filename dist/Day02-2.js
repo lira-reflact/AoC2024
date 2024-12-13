@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __importStar(require("fs"));
+console.log("Advent of Code Day Two | 2");
 const readInputFile = (filePath) => {
     try {
         return fs.readFileSync(filePath, 'utf-8');
@@ -43,47 +44,46 @@ const readInputFile = (filePath) => {
         return '';
     }
 };
-const filePath = 'input/aoc-01-1.txt';
+const filePath = 'input/Day02.txt';
 const fileContent = readInputFile(filePath);
 let fileContentSplit = fileContent.split("\n");
-const processColumns = (lines) => {
-    const left = [];
-    const right = [];
-    let isLeftColumn = true;
-    for (const line of lines) {
-        const trimmedLine = line.trim();
-        if (trimmedLine === "") {
-            continue;
+const isSafeSequence = (numbers) => {
+    let direction = null;
+    for (let i = 1; i < numbers.length; i++) {
+        const diff = numbers[i] - numbers[i - 1];
+        if (diff < -3 || diff > 3 || diff === 0)
+            return false;
+        if (direction === null) {
+            direction = diff > 0 ? "increasing" : "decreasing";
         }
-        const parts = trimmedLine.split(/\s+/);
-        if (parts.length !== 2) {
-            console.error(`Invalid line, 3 Values Expected: "${trimmedLine}"`);
-            continue;
+        else if ((direction === "increasing" && diff < 0) ||
+            (direction === "decreasing" && diff > 0)) {
+            return false;
         }
-        console.log();
-        const leftValue = parseFloat(parts[0]);
-        const rightValue = parseFloat(parts[1]);
-        if (isNaN(leftValue) || isNaN(rightValue)) {
-            console.error(`Invalid number in line: "${trimmedLine}"`);
-            continue;
-        }
-        left.push(leftValue);
-        right.push(rightValue);
     }
-    left.sort((a, b) => a - b);
-    right.sort((a, b) => a - b);
-    return { left, right };
+    return true;
 };
-const calculateSumOfDifferences = (left, right) => {
-    const minLength = Math.min(left.length, right.length);
-    let sumOfDifferences = 0;
-    for (let i = 0; i < minLength; i++) {
-        const difference = Math.abs(left[i] - right[i]);
-        console.log(`Rang ${i + 1}: | ${left[i]} - ${right[i]} | = ${difference}`);
-        sumOfDifferences += difference;
+const isSafeWithDampener = (numbers) => {
+    for (let i = 0; i < numbers.length; i++) {
+        const modifiedSequence = [...numbers.slice(0, i), ...numbers.slice(i + 1)];
+        if (isSafeSequence(modifiedSequence)) {
+            return true;
+        }
     }
-    return sumOfDifferences;
+    return false;
 };
-const sortedColumns = processColumns(fileContentSplit);
-const result = calculateSumOfDifferences(sortedColumns.left, sortedColumns.right);
-console.log("Sum of differences:", result);
+const countSafeReports = (reports) => {
+    let safeReports = 0;
+    for (const report of reports) {
+        const numbers = report.split(" ").map(num => parseInt(num, 10));
+        if (numbers.some(isNaN)) {
+            console.error("The number sequence has invalid entries:", report);
+            continue;
+        }
+        if (isSafeSequence(numbers) || isSafeWithDampener(numbers)) {
+            safeReports++;
+        }
+    }
+    return safeReports;
+};
+console.log("Safe reports with Dampener:", countSafeReports(fileContentSplit));

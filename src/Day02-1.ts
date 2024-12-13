@@ -1,4 +1,3 @@
-import { isAscii } from 'buffer';
 import * as fs from 'fs';
 
 console.log("Advent of Code Day Two | 1")
@@ -13,7 +12,7 @@ const readInputFile = (filePath: string): string => {
     }
 };
 
-const filePath = 'input/aoc-02.txt';
+const filePath = 'input/Day02.txt';
 const fileContent = readInputFile(filePath);
 let fileContentSplit = fileContent.split("\n");
 
@@ -28,9 +27,9 @@ const testIfSafe = (reports: string[]): number => {
         let direction: "increasing" | "decreasing" | null = null;
         let isSafe = true;
         for (let i = 1; i < numbers.length; i++) {
-            const diff = numbers[i] - numbers[i -1];
+            const diff = numbers[i] - numbers[i - 1];
 
-            if (diff < - 3|| diff > 3 || diff === 0) {
+            if (diff < - 3 || diff > 3 || diff === 0) {
                 isSafe = false;
                 break;
             }
@@ -39,15 +38,15 @@ const testIfSafe = (reports: string[]): number => {
             } else if (
                 (direction === "increasing" && diff < 0) ||
                 (direction === "decreasing" && diff > 0)
-            ){
+            ) {
                 isSafe = false;
                 break;
-            }           
+            }
         }
         if (isSafe) {
             safeReports++;
         }
+    }
+    return safeReports
 }
-return safeReports
-}
-console.log("Safe reports: ",testIfSafe(fileContentSplit));
+console.log("Safe reports: ", testIfSafe(fileContentSplit));

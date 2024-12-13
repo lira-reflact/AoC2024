@@ -10,7 +10,7 @@ const readInputFile = (filePath: string): string => {
   }
 };
 
-const filePath = 'input/aoc-04.txt';
+const filePath = 'input/Day04.txt';
 const fileContent = readInputFile(filePath);
 
 console.log("Part 2 - Sum of all valid enabled mul instructions:", fileContent);

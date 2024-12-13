@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-01-1": "tsc && node dist/aoc-01-1.js",
-    "start-01-2": "tsc && node dist/aoc-01-2.js",
-    "start-02-1": "tsc && node dist/aoc-02-1.js",
-    "start-02-2": "tsc && node dist/aoc-02-2.js",
-    "03": "tsc && node dist/aoc-03.js",
-    "04": "tsc && node dist/aoc-04.js"
+    "start-01-1": "tsc && node dist/Day01-1.js",
+    "start-01-2": "tsc && node dist/Day01-2.js",
+    "start-02-1": "tsc && node dist/Day02-1.js",
+    "start-02-2": "tsc && node dist/Day02-2.js",
+    "Day03": "tsc && node dist/Day03.js",
+    "Day04": "tsc && node dist/Day04.js"
   },
   "repository": {
     "type": "git",
