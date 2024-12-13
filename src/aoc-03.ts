@@ -1,6 +1,5 @@
 import * as fs from 'fs';
-
-console.log("Advent of Code Day Three | Part 1 & 2");
+console.log("Advent of Code Day Three");
 
 const readInputFile = (filePath: string): string => {
     try {
@@ -11,7 +10,7 @@ const readInputFile = (filePath: string): string => {
     }
 };
 
-const calculateMulSum = (input: string): { part1: number, part2: number } => {
+const calculateMulSum = (input: string): { part1: number } => {
     const mulRegex = /mul\((\d{1,3}),(\d{1,3})\)/g;
     const doDontRegex = /(do\(\)|don't\(\))/g;
 
@@ -20,7 +19,6 @@ const calculateMulSum = (input: string): { part1: number, part2: number } => {
     let totalSumPart2 = 0;
 
     let mulEnabled = true;
-    let instructions = input.match(doDontRegex) || [];
 
     while ((match = mulRegex.exec(input)) !== null) {
         const num1 = parseInt(match[1], 10);
@@ -28,29 +26,36 @@ const calculateMulSum = (input: string): { part1: number, part2: number } => {
         totalSumPart1 += num1 * num2;
     }
 
-    const tokens = input.split(/(?=mul\()|(?=do\(\))|(?=don't\(\))/);
-    for (const token of tokens) {
-        if (token.startsWith("do()")) {
-            mulEnabled = true;
-        } else if (token.startsWith("don't()")) {
-            mulEnabled = false;
-        } else if (token.startsWith("mul(")) {
-            const match = mulRegex.exec(token);
-            if (match && mulEnabled) {
-                const num1 = parseInt(match[1], 10);
-                const num2 = parseInt(match[2], 10);
-                totalSumPart2 += num1 * num2;
-            }
-        }
-    }
-
-    return { part1: totalSumPart1, part2: totalSumPart2 };
+    return { part1: totalSumPart1 };
 };
+
+const part2 = (input: string) => {
+    const pattern = /(?:(mul)\((\d+),(\d+)\))|(?:(do)\(\))|(?:(don't)\(\))/g;
+
+    const instructions = [...input.matchAll(pattern)];
+
+    let total = 0;
+    let enabled = true;
+    instructions.forEach(inst => {
+        // if inst[1] isn't set, it's not a mul() instruction
+        if (!inst[1]) {
+            /* so set enabled to the existence of inst[4], which is
+             * set if it's a do() instruction
+             */
+            enabled = !!inst[4];
+        } else if (enabled) {
+            const result = Number(inst[2]) * Number(inst[3]);
+            total += result;
+        }
+    });
+
+    return total;
+}
 
 const filePath = 'input/aoc-03.txt';
 const fileContent = readInputFile(filePath);
 
 const results = calculateMulSum(fileContent);
 console.log("Part 1 - Sum of all valid mul instructions:", results.part1);
-console.log("Part 2 - Sum of all valid enabled mul instructions:", results.part2);
+console.log("Part 2 - Sum of all valid enabled mul instructions:", part2(fileContent));
 

@@ -8,7 +8,8 @@
     "start-01-2": "tsc && node dist/aoc-01-2.js",
     "start-02-1": "tsc && node dist/aoc-02-1.js",
     "start-02-2": "tsc && node dist/aoc-02-2.js",
-    "03": "tsc && node dist/aoc-03.js"
+    "03": "tsc && node dist/aoc-03.js",
+    "04": "tsc && node dist/aoc-04.js"
   },
   "repository": {
     "type": "git",
